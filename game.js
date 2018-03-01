@@ -1,4 +1,5 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var score = 0;
 
 function preload() {
   game.load.image('square', 'assets/Images/square.png');
@@ -13,13 +14,19 @@ function create() {
   hp = game.add.image(0, 0, 'firstaid');
   hp1 = game.add.image(20, 0, 'firstaid');
   hp2 = game.add.image(40, 0, 'firstaid');
-  
   star = game.add.image(200, 200, 'star');
-
+  star.position.x = Math.floor(Math.random() * 13) * 40;
+  star.position.y = Math.floor(Math.random() * 10) * 40;
+  gameText = game.add.text(100, 0, "0", {
+          font: "28px Arial",
+          fill: "#fff"
+      });
+      gameText.anchor.setTo(1, 0);
 
 }
 
 function update() {
+      gameText.text = score;
   if (cursors.left.isDown)
   {
       //  Move to the left
@@ -41,4 +48,31 @@ function update() {
       //  Move to the right
        player.position.y = player.position.y + 5;
   }
+  if (boxHitsStar()) {
+            score++;
+            star.destroy();
+            placeRandomStar();
 }
+}
+
+function boxHitsStar(){
+   // traverse the linked list, starting at the tail
+      var collides = false;
+      var numTimes = 0;
+          if (((star.position.x + 13) < (player.position.x + 42) && ((star.position.x + 13) > player.position.x )) &&
+              ((star.position.y + 12) < (player.position.y + 42) && ((star.position.y + 12) > player.position.y) ) ){
+              collides = true;
+          }
+      
+      return collides;
+  
+}
+
+function placeRandomStar() {
+      if (star !== undefined) star.destroy();
+      star = game.add.image(0, 0, 'star');
+      do {
+          star.position.x = Math.floor(Math.random() * 13) * 40;
+          star.position.y = Math.floor(Math.random() * 10) * 40;
+      } while (boxHitsStar());
+  }
