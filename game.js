@@ -17,7 +17,7 @@ function create() {
   star = game.add.image(200, 200, 'star');
   star.position.x = Math.floor(Math.random() * 13) * 40;
   star.position.y = Math.floor(Math.random() * 10) * 40;
-  gameText = game.add.text(100, 0, "0", {
+  gameText = game.add.text(150, 0, "0", {
           font: "28px Arial",
           fill: "#fff"
       });
