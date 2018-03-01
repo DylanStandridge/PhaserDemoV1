@@ -33,7 +33,7 @@ function create() {
   placeRandomStar();
   
   // This adds text to the game. THis will allow you to set up size, style, etc.
-  gameText = game.add.text(600, 0, "0", {
+  gameText = game.add.text(700, 0, "0", {
           font: "28px Arial",
           fill: "#fff"
       });
@@ -46,7 +46,7 @@ function create() {
 //the update is a loop meaning its continuously running until you make it stop (IE game over)
 //notice this is constantly updating score, checking movement, and checking location
 function update() {
-      gameText.text = score;
+      gameText.text = "Score:" + score;
   if (cursors.left.isDown)
   {
       //  Move to the left
@@ -92,7 +92,6 @@ function boxHitsStar(){
 // this is a function that adds an image to the game that is called star (defined in preload)
 //it positions it at a random location based on Math.random
 function placeRandomStar() {
-      if (star !== undefined) star.destroy();
       star = game.add.image(0, 0, 'star');
       do {
           star.position.x = Math.floor(Math.random() * 800);
