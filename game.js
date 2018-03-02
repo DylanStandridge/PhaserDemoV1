@@ -47,7 +47,31 @@ function create() {
 //notice this is constantly updating score, checking movement, and checking location
 function update() {
       gameText.text = "Score:" + score;
-  if (cursors.left.isDown)
+  if (cursors.left.isDown && cursors.up.isDown)
+  {
+      //  Move to the left
+      player.position.x = player.position.x - 3;
+      player.position.y = player.position.y - 4;
+  }
+  else if (cursors.left.isDown && cursors.down.isDown)
+  {
+      //  Move to the left
+      player.position.x = player.position.x - 3;
+      player.position.y = player.position.y + 4;
+  }
+  else if (cursors.right.isDown && cursors.up.isDown)
+  {
+      //  Move to the left
+      player.position.x = player.position.x + 3;
+      player.position.y = player.position.y - 4;
+  }
+  else if (cursors.right.isDown && cursors.down.isDown)
+  {
+      //  Move to the left
+      player.position.x = player.position.x + 3;
+      player.position.y = player.position.y + 4;
+  }
+  else if (cursors.left.isDown)
   {
       //  Move to the left
       player.position.x = player.position.x - 5;
@@ -68,11 +92,13 @@ function update() {
       //  Move to the right
        player.position.y = player.position.y + 5;
   }
+  
   if (boxHitsStar()) {
             score++;
             star.destroy();
             placeRandomStar();
 }
+  moveEnemy()
 }
 
 //this is checking to see if our player has hit the star notice it uses a range of 42 for the player to outline the sprite
@@ -98,3 +124,6 @@ function placeRandomStar() {
           star.position.y = Math.floor(Math.random() * 600);
       } while (boxHitsStar());
   }
+function moveEnemy(){
+  //move enemy based on players location
+}
