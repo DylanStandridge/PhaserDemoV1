@@ -3,7 +3,8 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 var score = 0;
 var hp=3;
 var enemycounter = 0;
-enemySpeeds= [.5, 1, 1.5, 2.5, 3]
+gameover = true;
+enemySpeeds= [.5, 1, 1.5, 2.5, 3];
 var opp = [];
 // variables used for sprites based on sprites.
 var playerWidth=42, playerHeight=42, starcentx=13, starcenty=12;
@@ -17,7 +18,7 @@ function preload() {
   game.load.image('square', 'assets/Images/square.png');
   game.load.image('firstaid', 'assets/Images/firstaid.png');
   game.load.image('star', 'assets/Images/star.png');
-  game.load.image('enemy', 'assets/Images/enemy');
+  game.load.image('enemy', 'assets/Images/enemy.png');
 
   cursors = game.input.keyboard.createCursorKeys();
 }
@@ -51,7 +52,12 @@ function create() {
 //the update is a loop meaning its continuously running until you make it stop (IE game over)
 //notice this is constantly updating score, checking movement, and checking location
 function update() {
+  if (gameover){
       gameText.text = "Score:" + score;
+      }
+  else {
+        gameText.text= "Game Over"
+      }
       enemycounter++;
   if (cursors.left.isDown && cursors.up.isDown)
   {
@@ -160,6 +166,11 @@ function moveEnemy(){
     opp[i].position.x = opp[i].position.x - enemySpeeds[i]
     opp[i].position.y = opp[i].position.y - enemySpeeds[i]
       }
+    if (((opp[i].position.x) < (player.position.x + playerWidth) && ((opp[i].position.x + starcentx) > player.position.x )) &&
+              ((opp[i].position.y + starcenty) < (player.position.y + playerHeight) && ((opp[i].position.y + starcenty) > player.position.y) )){
+        player.destroy();
+        gameover = false;
+    }
 }
     
   
