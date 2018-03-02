@@ -2,7 +2,11 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 //variables to set up your score (starts at 0) and set up your health (starts at 3)
 var score = 0;
 var hp=3;
-
+var enemycounter = 0;
+enemySpeeds= [.5, 1, 1.5, 2.5, 3]
+var opp = [];
+// variables used for sprites based on sprites.
+var playerWidth=42, playerHeight=42, starcentx=13, starcenty=12;
 // this is our preload. this will get called before it ever creates anything so it has references
 // to the assets it will need. 
 function preload() {
@@ -13,6 +17,7 @@ function preload() {
   game.load.image('square', 'assets/Images/square.png');
   game.load.image('firstaid', 'assets/Images/firstaid.png');
   game.load.image('star', 'assets/Images/star.png');
+  game.load.image('enemy', 'assets/Images/enemy');
 
   cursors = game.input.keyboard.createCursorKeys();
 }
@@ -47,6 +52,7 @@ function create() {
 //notice this is constantly updating score, checking movement, and checking location
 function update() {
       gameText.text = "Score:" + score;
+      enemycounter++;
   if (cursors.left.isDown && cursors.up.isDown)
   {
       //  Move to the left
@@ -98,6 +104,17 @@ function update() {
             star.destroy();
             placeRandomStar();
 }
+  if ((enemycounter==60) || (enemycounter==1800) || (enemycounter==3600) || (enemycounter==5400 || enemycounter==7200)){
+      var randnum = Math.random() * 1400
+      if (randnum > 800) {
+        opp[opp.length] = game.add.image( 0, randnum - 800, 'enemy') 
+      }
+      else {
+        opp[opp.length] = game.add.image( randnum, 0, 'enemy') 
+
+      }
+
+  }
   moveEnemy()
 }
 
@@ -107,8 +124,8 @@ function boxHitsStar(){
       var collides = false;
       var numTimes = 0;
  // this is a conditional statment to check where the player is hitting. 
-          if (((star.position.x + 13) < (player.position.x + 42) && ((star.position.x + 13) > player.position.x )) &&
-              ((star.position.y + 12) < (player.position.y + 42) && ((star.position.y + 12) > player.position.y) ) ){
+          if (((star.position.x + starcentx) < (player.position.x + playerWidth) && ((star.position.x + starcentx) > player.position.x )) &&
+              ((star.position.y + starcenty) < (player.position.y + playerHeight) && ((star.position.y + starcenty) > player.position.y) ) ){
               collides = true;
           }
       //returns a true false value
@@ -120,10 +137,30 @@ function boxHitsStar(){
 function placeRandomStar() {
       star = game.add.image(0, 0, 'star');
       do {
-          star.position.x = Math.floor(Math.random() * 800);
-          star.position.y = Math.floor(Math.random() * 600);
+          star.position.x = Math.floor(Math.random() * 770);
+          star.position.y = Math.floor(Math.random() * 570);
       } while (boxHitsStar());
   }
 function moveEnemy(){
   //move enemy based on players location
+  for (i = 0; i < opp.length; i++){
+        if ((player.position.x >= opp[i].position.x) && (player.position.y >= opp[i].position.y)){
+    opp[i].position.x = opp[i].position.x + enemySpeeds[i]
+    opp[i].position.y = opp[i].position.y + enemySpeeds[i]
+      }
+    else if ((player.position.x >= opp[i].position.x) && (player.position.y <= opp[i].position.y)){
+    opp[i].position.x = opp[i].position.x + enemySpeeds[i]
+    opp[i].position.y = opp[i].position.y - enemySpeeds[i]
+      }
+    else if ((player.position.x <= opp[i].position.x) && (player.position.y >= opp[i].position.y)){
+    opp[i].position.x = opp[i].position.x - enemySpeeds[i]
+    opp[i].position.y = opp[i].position.y + enemySpeeds[i]
+      }
+    else if ((player.position.x <= opp[i].position.x) && (player.position.y <= opp[i].position.y)){
+    opp[i].position.x = opp[i].position.x - enemySpeeds[i]
+    opp[i].position.y = opp[i].position.y - enemySpeeds[i]
+      }
+}
+    
+  
 }
