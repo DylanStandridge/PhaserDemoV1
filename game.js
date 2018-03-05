@@ -59,42 +59,42 @@ function update() {
         gameText.text= "Game Over"
       }
       enemycounter++;
-  if (cursors.left.isDown && cursors.up.isDown)
+  if ((cursors.left.isDown && cursors.up.isDown))
   {
       //  Move to the left
       player.position.x = player.position.x - 3;
       player.position.y = player.position.y - 4;
   }
-  else if (cursors.left.isDown && cursors.down.isDown)
+  else if ((cursors.left.isDown && cursors.down.isDown))
   {
       //  Move to the left
       player.position.x = player.position.x - 3;
       player.position.y = player.position.y + 4;
   }
-  else if (cursors.right.isDown && cursors.up.isDown)
+  else if ((cursors.right.isDown && cursors.up.isDown))
   {
       //  Move to the left
       player.position.x = player.position.x + 3;
       player.position.y = player.position.y - 4;
   }
-  else if (cursors.right.isDown && cursors.down.isDown)
+  else if ((cursors.right.isDown && cursors.down.isDown))
   {
       //  Move to the left
       player.position.x = player.position.x + 3;
       player.position.y = player.position.y + 4;
   }
-  else if (cursors.left.isDown)
+  else if (cursors.left.isDown )
   {
       //  Move to the left
       player.position.x = player.position.x - 5;
   }
-  else if (cursors.right.isDown)
+  else if (cursors.right.isDown )
   {
       //  Move to the right
        player.position.x = player.position.x + 5;
   }
   
-  else if (cursors.up.isDown)
+  else if (cursors.up.isDown )
   {
       //  Move to the left
       player.position.y = player.position.y - 5;
@@ -104,7 +104,18 @@ function update() {
       //  Move to the right
        player.position.y = player.position.y + 5;
   }
-  
+  if (player.position.x > 758) {
+    player.position.x = player.position.x - 5;
+  }
+  if(player.position.y > 558) {
+    player.position.y = player.position.y - 5;
+  }
+  if ( player.position.y < 2) {
+    player.position.y = player.position.y + 5;
+  }
+  if (player.position.x < 2){
+    player.position.x = player.position.x + 5;
+  }
   if (boxHitsStar()) {
             score++;
             star.destroy();
