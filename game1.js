@@ -4,6 +4,7 @@ var score = 0;
 var hp=3;
 var enemycounter = 0;
 gameover = true;
+projectiles = [];
 enemySpeeds= [.5, 1, 1.5, 2.5, 3];
 var opp = [];
 // variables used for sprites based on sprites.
@@ -19,7 +20,7 @@ function preload() {
   game.load.image('firstaid', 'assets/Images/firstaid.png');
   game.load.image('star', 'assets/Images/star.png');
   game.load.image('enemy', 'assets/Images/enemy.png');
-
+	game.load.image('projectile', 'assets/Images/projectile.png')
   cursors = game.input.keyboard.createCursorKeys();
 }
 
@@ -35,9 +36,6 @@ function create() {
   hp1 = game.add.sprite(0, 0, 'firstaid');
   hp2 = game.add.sprite(20, 0, 'firstaid');
   hp3 = game.add.sprite(40, 0, 'firstaid');
-	bullets = game.add.group();
-	bullets.enableBody = true;
-	bullets.physicsBodyType = Phaser.Physics.ARCADE;
   game.physics.enable(player, Phaser.Physics.ARCADE);
   player.enableBody=true;
   player.body.collideWorldBounds = true;
@@ -75,6 +73,9 @@ function update() {
       enemycounter++;
   game.physics.arcade.collide(player, star, collectStar);
   checkEnemyTime();
+	if (projectiles.length > 0){
+	moveProjectile();
+		}
   movePlayer();
   moveEnemy();
 }
@@ -235,5 +236,85 @@ function resetEnemys(){
 		}
 }
 function fire(){
+	
+	switch(direction){
+		case 'upright':
+			  projectiles[projectiles.length] = game.add.sprite( player.position.x + 45, player.position.y - 3, 'projectile') 
+			break;
+			
+		case 'upleft':
+				projectiles[projectiles.length] = game.add.sprite( player.position.x - 3, player.position.y - 3, 'projectile') 
+			break;
+			
+		case 'downleft':
+				projectiles[projectiles.length] = game.add.sprite( player.position.x - 3, player.position.y + 45, 'projectile') 
+			break;
+			
+		case 'downright':
+			 	projectiles[projectiles.length] = game.add.sprite( player.position.x + 45, player.position.y + 45, 'projectile') 
+			break;
+			
+		case 'up':
+			 	projectiles[projectiles.length] = game.add.sprite( player.position.x + 21, player.position.y - 3, 'projectile') 
+			break;
+		case 'down':
+			 	projectiles[projectiles.length] = game.add.sprite( player.position.x + 21, player.position.y + 45, 'projectile') 
+			break;
+			
+		case 'left':
+				projectiles[projectiles.length] = game.add.sprite( player.position.x - 3, player.position.y + 21, 'projectile') 
+			break;
+			
+		case 'right':
+				projectiles[projectiles.length] = game.add.sprite( player.position.x + 45, player.position.y + 21, 'projectile') 
+			break;
+	}
+		game.physics.enable(projectiles[projectiles.length - 1], Phaser.Physics.ARCADE);
+		projectiles[projectiles.length - 1].enableBody = true;
+		projectiles[projectiles.length - 1].vect = direction;
+}
+function moveProjectile(){
+	console.log("In projetile")
+	for (i = 0; i < projectiles.length; i++){
+		switch(projectiles[i].vect){
+			case 'upright':
+				projectiles[i].position.x = projectiles[i].position.x + 6;
+				projectiles[i].position.y = projectiles[i].position.y - 8;
+				break;
+
+			case 'upleft':
+				projectiles[i].position.x = projectiles[i].position.x - 6;
+				projectiles[i].position.y = projectiles[i].position.y - 8;
+				break;
+
+			case 'downleft':
+				projectiles[i].position.x = projectiles[i].position.x - 6;
+				projectiles[i].position.y = projectiles[i].position.y + 8;
+				break;
+
+			case 'downright':
+				projectiles[i].position.x = projectiles[i].position.x + 6;
+				projectiles[i].position.y = projectiles[i].position.y + 8;
+				break;
+
+			case 'up':
+				projectiles[i].position.y = projectiles[i].position.y - 8;
+				break;
+			case 'down':
+				projectiles[i].position.y = projectiles[i].position.y + 8;
+				break;
+
+			case 'left':
+				projectiles[i].position.x = projectiles[i].position.x - 8;
+				break;
+
+			case 'right':
+				projectiles[i].position.x = projectiles[i].position.x + 8;
+				break;
+		}
+		if (projectiles[i].position.x > 800 || projectiles[i].position.x < 0 || projectiles[i].position.y > 600 || projectiles[i].position.y < 0){
+			projectiles[i].destroy()
+		}
+}
 	
 }
