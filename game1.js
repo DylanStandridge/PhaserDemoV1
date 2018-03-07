@@ -93,22 +93,26 @@ function moveEnemy(){
   //move enemy based on players location
   for (i = 0; i < opp.length; i++){
         if ((player.position.x >= opp[i].position.x) && (player.position.y >= opp[i].position.y)){
-    opp[i].position.x = opp[i].position.x + enemySpeeds[i]
-    opp[i].position.y = opp[i].position.y + enemySpeeds[i]
+    opp[i].position.x = opp[i].position.x + opp[i].speed
+    opp[i].position.y = opp[i].position.y + opp[i].speed
       }
     else if ((player.position.x >= opp[i].position.x) && (player.position.y <= opp[i].position.y)){
-    opp[i].position.x = opp[i].position.x + enemySpeeds[i]
-    opp[i].position.y = opp[i].position.y - enemySpeeds[i]
+    opp[i].position.x = opp[i].position.x + opp[i].speed
+    opp[i].position.y = opp[i].position.y - opp[i].speed
       }
     else if ((player.position.x <= opp[i].position.x) && (player.position.y >= opp[i].position.y)){
-    opp[i].position.x = opp[i].position.x - enemySpeeds[i]
-    opp[i].position.y = opp[i].position.y + enemySpeeds[i]
+    opp[i].position.x = opp[i].position.x - opp[i].speed
+    opp[i].position.y = opp[i].position.y + opp[i].speed
       }
     else if ((player.position.x <= opp[i].position.x) && (player.position.y <= opp[i].position.y)){
-    opp[i].position.x = opp[i].position.x - enemySpeeds[i]
-    opp[i].position.y = opp[i].position.y - enemySpeeds[i]
+    opp[i].position.x = opp[i].position.x - opp[i].speed
+    opp[i].position.y = opp[i].position.y - opp[i].speed
       }
       game.physics.arcade.collide(player, opp[i], takeHP);
+		for (j=0; j<projectiles.length; j++){
+		  game.physics.arcade.collide(projectiles[j], opp[i], function(){killEnemy(i,j)});
+																																		}
+
     }
 }
     
@@ -178,16 +182,18 @@ function collectStar(){
             placeRandomStar();
 }
 function checkEnemyTime(){
-   if ((enemycounter==60) || (enemycounter==1800) || (enemycounter==3600) || (enemycounter==5400 || enemycounter==7200)){
+   if ((enemycounter % 60) === 0){
       var randnum = Math.random() * 1400
       if (randnum > 800) {
         opp[opp.length] = game.add.sprite( 0, randnum - 800, 'enemy')
+				opp[opp.length-1].speed=(Math.random() * 2) + 1;
         game.physics.enable(opp[opp.length - 1], Phaser.Physics.ARCADE);
 				opp[opp.length - 1].enableBody = true;
       }
       else {
         opp[opp.length] = game.add.sprite( randnum, 0, 'enemy') 
         game.physics.enable(opp[opp.length - 1], Phaser.Physics.ARCADE);
+				opp[opp.length-1].speed=(Math.random() * 2) + 1;
       }
 
   }
@@ -234,6 +240,8 @@ function resetEnemys(){
         game.physics.enable(opp[i], Phaser.Physics.ARCADE);
       }
 		}
+	player.position.x = 400;
+	player.position.y = 300;
 }
 function fire(){
 	
@@ -318,3 +326,9 @@ function moveProjectile(){
 }
 	
 }
+		
+		function killEnemy(i,j){
+			opp[i].destroy()
+			projectiles[j].destroy()
+			
+		}
