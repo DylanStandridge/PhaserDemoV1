@@ -1,3 +1,4 @@
+// https://phaser.io/docs/2.6.2/Phaser.Game.html
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 //variables to set up your score (starts at 0) and set up your health (starts at 3)
 var score = 0;
@@ -5,22 +6,22 @@ var hp=3;
 var enemycounter = 0;
 gameover = true;
 projectiles = [];
-enemySpeeds= [.5, 1, 1.5, 2.5, 3];
+enemySpeeds= [0.5, 1, 1.5, 2.5, 3];
 var opp = [];
-// variables used for sprites based on sprites.
-var playerWidth=42, playerHeight=42, starcentx=13, starcenty=12;
 // this is our preload. this will get called before it ever creates anything so it has references
 // to the assets it will need. 
 function preload() {
   //upload images to the game so the game knows they exist.
   // syntax:
   // game.load.image(Name, Location)
-  
+  // https://phaser.io/examples/v2/basics/01-load-an-image
+	// https://phaser.io/docs/2.6.2/Phaser.Loader.html#image
   game.load.image('square', 'assets/Images/square.png');
   game.load.image('firstaid', 'assets/Images/firstaid.png');
   game.load.image('star', 'assets/Images/star.png');
   game.load.image('enemy', 'assets/Images/enemy.png');
 	game.load.image('projectile', 'assets/Images/projectile.png')
+	// https://phaser.io/docs/2.6.2/Phaser.Keyboard.html#createCursorKeys
   cursors = game.input.keyboard.createCursorKeys();
 }
 
@@ -31,7 +32,7 @@ function create() {
   //assigns these object references into a variable for future reference.
   // syntax:
   // game.add.image(X coordinate, Y coordinate, Name of loaded Object)
-
+	// https://phaser.io/examples/v2/basics/01-load-an-image
   player = game.add.sprite(370, 270, 'square');
   hp1 = game.add.sprite(0, 0, 'firstaid');
   hp2 = game.add.sprite(20, 0, 'firstaid');
@@ -39,11 +40,14 @@ function create() {
   game.physics.enable(player, Phaser.Physics.ARCADE);
   player.enableBody=true;
   player.body.collideWorldBounds = true;
+	
+	// https://github.com/photonstorm/phaser-examples/blob/master/examples/input/keyboard%20hotkeys.js
   spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
 	  // this is a function call. this will call our star function so we can place the new objective.
   placeRandomStar();
   
   // This adds text to the game. THis will allow you to set up size, style, etc.
+	// https://phaser.io/docs/2.6.2/Phaser.Text.html
   gameText = game.add.text(700, 0, "0", {
           font: "28px Arial",
           fill: "#fff"
@@ -71,6 +75,7 @@ function update() {
 				endText.text = "Game Over";
       }
       enemycounter++;
+	// https://phaser.io/examples/v2/arcade-physics/sprite-vs-sprite
   game.physics.arcade.collide(player, star, collectStar);
   checkEnemyTime();
 	if (projectiles.length > 0){
@@ -84,6 +89,7 @@ function update() {
 //it positions it at a random location based on Math.random
 function placeRandomStar() {
       star = game.add.sprite(0, 0, 'star');
+	// https://phaser.io/docs/2.4.4/Phaser.Physics.Arcade.html
       game.physics.enable(star, Phaser.Physics.ARCADE);
       star.enableBody=true;
           star.position.x = Math.floor(Math.random() * 770);
@@ -330,5 +336,6 @@ function moveProjectile(){
 		function killEnemy(i,j){
 			opp[i].destroy()
 			projectiles[j].destroy()
-			
+			opp.splice(i,1)
+			projectiles.splice(j,1)
 		}
